@@ -2,7 +2,6 @@ import { useDarkMode } from './hooks/useDarkMode';
 import { useActiveSection } from './hooks/useActiveSection';
 import { Navbar } from './components/Navbar';
 import { ScrollProgress } from './components/ScrollProgress';
-import { SmoothCursor } from './components/SmoothCursor';
 import { Footer } from './components/Footer';
 import { Hero } from './sections/Hero';
 import { About } from './sections/About';
@@ -20,8 +19,7 @@ export default function App() {
   const activeSection = useActiveSection(SECTION_IDS);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white font-sora cursor-none">
-      <SmoothCursor />
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white font-sora">
       <ScrollProgress />
       <Navbar isDark={isDark} onToggleDark={toggle} activeSection={activeSection} />
 
