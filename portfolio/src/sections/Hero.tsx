@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { motion, type Variants } from 'framer-motion';
-import { Download, Mail, MapPin, ArrowDown, Building2 } from 'lucide-react';
+import { Download, MapPin, ArrowDown, Building2 } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Globe } from '../components/Globe';
 import { personalInfo, contactInfo } from '../data/resumeData';
 import { gsap } from '../utils/gsapSetup';
 
-interface HeroProps { isDark: boolean; }
+interface HeroProps { isDark: boolean; introComplete?: boolean; }
 
-export function Hero({ isDark }: HeroProps) {
+export function Hero({ isDark, introComplete = true }: HeroProps) {
   const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export function Hero({ isDark }: HeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-6 items-center min-h-[calc(100vh-10rem)]">
 
           {/* LEFT — text content */}
-          <motion.div variants={container} initial="hidden" animate="visible">
+          <motion.div variants={container} initial="hidden" animate={introComplete ? 'visible' : 'hidden'}>
 
             {/* Badge */}
             <motion.div variants={item} className="mb-7">
@@ -134,16 +134,13 @@ export function Hero({ isDark }: HeroProps) {
               <Button variant="primary" size="lg" href="/resume-satyasai-sypu.pdf" download icon={<Download size={16} />}>
                 Download Resume
               </Button>
-              <Button variant="secondary" size="lg" href={`mailto:${contactInfo.email}`} icon={<Mail size={16} />}>
-                Contact Me
-              </Button>
             </motion.div>
           </motion.div>
 
           {/* RIGHT — Globe (desktop only) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
+            animate={introComplete ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
             transition={{ duration: 1.1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="relative hidden lg:flex items-center justify-center"
             aria-hidden
@@ -158,8 +155,8 @@ export function Hero({ isDark }: HeroProps) {
         {/* Scroll cue */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 0.7 }}
+          animate={introComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+          transition={{ delay: 0.8, duration: 0.7 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
         >
           <span className="text-[9px] text-gray-400 dark:text-gray-600 font-semibold tracking-[0.25em] uppercase">

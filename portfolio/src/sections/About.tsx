@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { gsap } from '../utils/gsapSetup';
 import { SectionWrapper } from '../components/SectionWrapper';
 import { SectionHeading } from '../components/SectionHeading';
+import { PhotoCarousel } from '../components/PhotoCarousel';
 import { personalInfo, stats } from '../data/resumeData';
 
 
@@ -84,21 +85,30 @@ export function About() {
           description={personalInfo.summary}
         />
 
-        {/* Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          {highlights.map((h, i) => (
-            <motion.div
-              key={i}
-              data-about-item
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
-            >
-              <div className="w-8 h-1 rounded-full bg-blue-500 mb-4" />
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{h.title}</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{h.desc}</p>
-            </motion.div>
-          ))}
+        {/* Photo + highlights two-column layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-10 mb-16 items-start">
+
+          {/* Photo carousel */}
+          <motion.div data-about-item className="mx-auto lg:mx-0 w-72 lg:w-full flex-shrink-0">
+            <PhotoCarousel />
+          </motion.div>
+
+          {/* Highlights */}
+          <div className="grid grid-cols-1 sm:grid-cols-1 gap-6">
+            {highlights.map((h, i) => (
+              <motion.div
+                key={i}
+                data-about-item
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.2 }}
+                className="p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+              >
+                <div className="w-8 h-1 rounded-full bg-blue-500 mb-4" />
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{h.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{h.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* Stats */}

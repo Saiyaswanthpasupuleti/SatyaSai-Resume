@@ -1,5 +1,9 @@
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useDarkMode } from './hooks/useDarkMode';
 import { useActiveSection } from './hooks/useActiveSection';
+import { useLenis } from './hooks/useLenis';
+import { IntroScreen } from './components/IntroScreen';
 import { Navbar } from './components/Navbar';
 import { ScrollProgress } from './components/ScrollProgress';
 import { Footer } from './components/Footer';
@@ -18,23 +22,40 @@ export default function App() {
   const { isDark, toggle } = useDarkMode();
   const activeSection = useActiveSection(SECTION_IDS);
 
+  // Intro states
+  const [showIntro, setShowIntro] = useState(true);
+  const [introComplete, setIntroComplete] = useState(false);
+
+  // Lenis smooth scroll — enabled only after the intro exits
+  useLenis(introComplete);
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white font-sora">
-      <ScrollProgress />
-      <Navbar isDark={isDark} onToggleDark={toggle} activeSection={activeSection} />
+    <>
+      {/* Intro overlay — AnimatePresence drives the exit animation */}
+      <AnimatePresence onExitComplete={() => setIntroComplete(true)}>
+        {showIntro && (
+          <IntroScreen onDone={() => setShowIntro(false)} isDark={isDark} />
+        )}
+      </AnimatePresence>
 
-      <main>
-        <Hero isDark={isDark} />
-        <About />
-        <Skills />
-        <Education />
-        <Experience />
-        <Projects />
-        <Certifications />
-        <Contact />
-      </main>
+      {/* Main site */}
+      <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white font-sora">
+        <ScrollProgress />
+        <Navbar isDark={isDark} onToggleDark={toggle} activeSection={activeSection} />
 
-      <Footer />
-    </div>
+        <main>
+          <Hero isDark={isDark} introComplete={introComplete} />
+          <About />
+          <Skills />
+          <Education />
+          <Experience />
+          <Projects />
+          <Certifications />
+          <Contact />
+        </main>
+
+        <Footer />
+      </div>
+    </>
   );
 }
